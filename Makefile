@@ -32,6 +32,9 @@ clean:
 	rm -f $(PROJECT)/server/assets.go
 	rm -r dist
 
+compile:
+	go install $(LDFLAGS) ./$(PROJECT)/
+
 coverage:
 	go test -race -covermode=atomic -coverprofile=c.out ./...
 	sed -i '/^github.com\/cloudcloud\/auto-docs\/server\/auto-docs\/assets.go.*/d' c.out
@@ -49,8 +52,7 @@ image: VERSION?=1.0.0
 image:
 	docker build -t cloudcloud/auto-docs:v$(VERSION) .
 
-install: build-fe
-	go install $(LDFLAGS) ./$(PROJECT)/
+install: build-fe compile
 
 test: bin-dist install
 	go test -v -race ./...
