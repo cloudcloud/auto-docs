@@ -1,0 +1,5 @@
+build
+c.out
+dist
+node_modules
+?_test.go

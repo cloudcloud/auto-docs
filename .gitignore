@@ -1,0 +1,11 @@
+.auto-docs.db
+.ad.yaml
+build/
+node_modules
+dist
+*log
+data/migrate.go
+auto-docs/server/assets.go
+c.out
+ad
+cover.html

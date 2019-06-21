@@ -1,0 +1,16 @@
+version: '3'
+services:
+  autodocs:
+    image: golang
+    ports:
+      - '8008:8008'
+    working_dir: "/go/src/github.com/CerealBoy/auto-docs/"
+    entrypoint: "sh"
+    command: "-c 'tail -f /dev/null'"
+    environment:
+      GO111MODULE: "on"
+      NODE_ENV: "development"
+    volumes:
+      - /home/allan/.ssh/github_rsa:/root/.ssh/id_rsa
+      - ./:/go/src/github.com/CerealBoy/auto-docs/
+
