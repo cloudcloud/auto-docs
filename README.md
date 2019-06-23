@@ -59,7 +59,7 @@ a make target is provided.
 To compile the frontend components ready for binary compilation,
 another make target is available.
 
-    make install
+    make build-fe
 
 To build the bindata requirements, separate make targets are
 utilised.
