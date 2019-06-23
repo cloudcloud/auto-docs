@@ -37,7 +37,7 @@ compile:
 
 coverage:
 	go test -race -covermode=atomic -coverprofile=c.out ./...
-	sed -i '/^github.com\/cloudcloud\/auto-docs\/server\/auto-docs\/assets.go.*/d' c.out
+	sed -i '/^github.com\/cloudcloud\/auto-docs\/auto-docs\/server\/assets.go.*/d' c.out
 	go tool cover -html=c.out -o cover.html
 
 # at this time, there's no watch enabled for the go binary
