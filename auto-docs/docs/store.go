@@ -15,6 +15,7 @@ import (
 	"path/filepath"
 	"strings"
 
+	autodocs "github.com/cloudcloud/auto-docs"
 	"gitlab.com/golang-commonmark/markdown"
 )
 
@@ -25,7 +26,7 @@ var (
 
 func init() {
 	S.Dirs = []*Dir{}
-	S.Pages = make(map[string]*Page, 0)
+	S.Pages = make(map[string]*autodocs.Page, 0)
 }
 
 // Dir gives a holder of further nodes.
@@ -38,21 +39,13 @@ type Dir struct {
 	Text     string `json:"text"`
 }
 
-// Page is the content structure for an individual page item.
-type Page struct {
-	// Name is the displayable identifier for a page.
-	Name string `json:"name"`
-	// Content is the parsed markup of the page.
-	Content string `json:"content"`
-}
-
 // Store captures the doc file references and content.
 type Store struct {
 	// Dirs tracks the structure of pages under their paths.
 	Dirs []*Dir `json:"pages"`
 
 	// Pages captures the content for a full path page.
-	Pages map[string]*Page `json:"-"`
+	Pages map[string]*autodocs.Page `json:"-"`
 
 	// path is the base that this store is defined for.
 	path string
@@ -130,7 +123,7 @@ func addToDir(d []*Dir, p, o string) []*Dir {
 }
 
 // buildPage
-func buildPage(p, d string) (*Page, error) {
+func buildPage(p, d string) (*autodocs.Page, error) {
 	b := tokenise(p)
 	m := markdown.New(markdown.XHTMLOutput(true))
 	f, err := ioutil.ReadFile(d)
@@ -138,7 +131,7 @@ func buildPage(p, d string) (*Page, error) {
 		return nil, fmt.Errorf("unable to load markdown file: %s", err)
 	}
 
-	return &Page{
+	return &autodocs.Page{
 		Name:    b[len(b)-1],
 		Content: m.RenderToString(f),
 	}, nil

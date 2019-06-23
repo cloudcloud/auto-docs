@@ -8,6 +8,7 @@ import (
 	"testing"
 	"time"
 
+	autodocs "github.com/cloudcloud/auto-docs"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -47,7 +48,7 @@ func TestUpdateFromPath(t *testing.T) {
 	for _, a := range x {
 		s := &Store{
 			Dirs:  []*Dir{},
-			Pages: map[string]*Page{},
+			Pages: map[string]*autodocs.Page{},
 		}
 		log.SetOutput(a.Buffer)
 
@@ -175,7 +176,7 @@ func TestAddToDir(t *testing.T) {
 }
 
 type pageStruct struct {
-	ExpPage *Page
+	ExpPage *autodocs.Page
 	ExpErr  error
 	InpPag  string
 	InpDir  string
@@ -186,7 +187,7 @@ func TestBuildPage(t *testing.T) {
 	assert := assert.New(t)
 	x := []pageStruct{
 		{
-			ExpPage: &Page{Name: "root", Content: "<h1>root</h1>\n"},
+			ExpPage: &autodocs.Page{Name: "root", Content: "<h1>root</h1>\n"},
 			ExpErr:  nil,
 			InpPag:  "/root",
 			InpDir:  getTestMarkdownDir() + "root.md",
