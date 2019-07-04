@@ -67,6 +67,7 @@ jobs:
           command: |
             cc-test-reporter before-build
             go-bindata -o ./auto-docs/server/assets.go -prefix dist/ dist/...
+            sed -i "s/package main/package server/" ./auto-docs/server/assets.go
             go test -coverprofile=c.out -covermode=atomic -race ./...
             RESULT=$?
             sed -i s#github.com/cloudcloud/auto-docs/## c.out
