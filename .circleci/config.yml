@@ -66,11 +66,11 @@ jobs:
           name: Test backend
           command: |
             cc-test-reporter before-build
-            go-bindata -o ./auto-docs/assets.go -prefix dist/ dist/...
+            go-bindata -o ./auto-docs/server/assets.go -prefix dist/ dist/...
             go test -coverprofile=c.out -covermode=atomic -race ./...
             RESULT=$?
             sed -i s#github.com/cloudcloud/auto-docs/## c.out
-            sed -i '/^auto-docs\/assets.go.*/d' c.out
+            sed -i '/^auto-docs\/server\/assets.go.*/d' c.out
             cc-test-reporter after-build -t gocov --exit-code $RESULT
       - store_artifacts:
           path: c.out
