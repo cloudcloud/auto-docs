@@ -1,0 +1,150 @@
+aliases:
+  - &default-env
+    GO111MODULE=on
+
+  - &working-dir
+    /go/auto-docs
+  - &workspace-persist
+    root: /go/
+    paths:
+      - auto-docs
+      - bin
+      - pkg
+      - src
+
+version: 2
+jobs:
+  build:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: golang:1.12-stretch
+    steps:
+      - checkout
+      - restore-cache:
+          key: v1-deps-{{ checksum "go.sum" }}
+      - checkout
+      - run:
+          name: Prep Local
+          command: |
+            go mod download
+            GO111MODULE=off go get -u github.com/kevinburke/go-bindata/...
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /go/bin/cc-test-reporter
+            chmod +x /go/bin/cc-test-reporter
+      - persist_to_workspace: *workspace-persist
+      - save-cache:
+          paths:
+            - /go/
+          key: v1-deps-{{ checksum "go.sum" }}
+
+  fe-compile:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: vuejs/ci
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Compile the Frontend
+          command: |
+            yarn && yarn build
+      - store_artifacts:
+          path: dist
+          destination: frontend
+      - persist_to_workspace: *workspace-persist
+
+  be-tests:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: golang:1.12-stretch
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Test backend
+          command: |
+            cc-test-reporter before-build
+            go-bindata -o ./auto-docs/assets.go -prefix dist/ dist/...
+            go test -coverprofile=c.out -covermode=atomic -race ./...
+            RESULT=$?
+            sed -i s#github.com/cloudcloud/auto-docs/## c.out
+            sed -i '/^auto-docs\/assets.go.*/d' c.out
+            cc-test-reporter after-build -t gocov --exit-code $RESULT
+      - store_artifacts:
+          path: c.out
+          destination: test-coverage
+      - persist_to_workspace: *workspace-persist
+
+  images:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: golang:1.12-stretch
+    steps:
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Build executables
+          command: |
+            go-bindata -o auto-docs/assets.go -prefix dist/ dist/...
+            GOARCH=amd64 GOOS=linux go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
+            GOARCH=amd64 GOOS=darwin go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
+            GOARCH=amd64 GOOS=windows go build -o build/auto-docs.${GOARCH}-${GOOS}.exe ./auto-docs
+            GOARCH=386 GOOS=linux go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
+            GOARCH=386 GOOS=windows go build -o build/auto-docs.${GOARCH}-${GOOS}.exe ./auto-docs
+      - run:
+          name: Push to github
+          command: |
+            ghr -t ${GITHUB_TOKEN} -u ${CIRCLE_PROJECT_USERNAME} -r ${CIRCLE_PROJECT_REPONAME} -c ${CIRCLE_SHA1} ${CIRCLE_TAG} ./build/
+      - store_artifacts:
+          path: build
+          destination: binaries
+
+  docker-image:
+    environment: *default-env
+    working_directory: *working-dir
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
+      - attach_workspace:
+          at: /go/
+      - run:
+          name: Image Build
+          command: |
+            docker build -t --rm=false cloudcloud/auto-docs:v${CIRCLE_TAG} .
+            echo ${DOCKERHUB_PASSWORD} | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
+            docker push cloudcloud/auto-docs:${CIRCLE_TAG}
+
+workflows:
+  version: 2
+
+  auto-docs:
+    jobs:
+      - build
+
+      - fe-compile:
+          requires:
+            - build
+
+      - be-tests:
+          requires:
+            - fe-compile
+
+      - images:
+          requires:
+            - be-tests
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only:
+                - /v[0-9]+.[0-9]+.[0-9]+/
+
+      - docker-image:
+          requires:
+            - images
+

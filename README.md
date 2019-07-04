@@ -1,5 +1,8 @@
 # auto-docs
 
+[![Maintainability](https://api.codeclimate.com/v1/badges/fa2cff555295e8949be1/maintainability)](https://codeclimate.com/github/cloudcloud/auto-docs/maintainability)
+[![Test Coverage](https://api.codeclimate.com/v1/badges/fa2cff555295e8949be1/test_coverage)](https://codeclimate.com/github/cloudcloud/auto-docs/test_coverage)
+
 ## background
 
 This project aims to be somewhat of a Knowledge Management system

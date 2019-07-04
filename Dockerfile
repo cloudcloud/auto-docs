@@ -1,5 +1,5 @@
 FROM node:12.0-slim AS fe
-LABEL maintainer="Al <allan.shone@gmail.com>"
+LABEL maintainer="CerealBoy <allan.shone@gmail.com>"
 COPY . .
 RUN yarn && yarn build
 
@@ -13,7 +13,7 @@ RUN apk add ca-certificates git && \
     go-bindata -o auto-docs/server/assets.go --prefix dist/ dist/... && \
     sed -i "s/package main/package server/" auto-docs/server/assets.go && \
     GO111MODULE=on go mod download && \
-    GO111MODULE=on go build -o /auto-docs ./auto-docs
+    GO111MODULE=on go build -ldflags "-X main.GitCommit=$(git tag -l | head -n 1)" -o /auto-docs ./auto-docs
 
 FROM golang:alpine AS release
 ENTRYPOINT ["/auto-docs"]
