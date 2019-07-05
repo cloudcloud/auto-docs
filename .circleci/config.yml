@@ -126,14 +126,23 @@ workflows:
   auto-docs:
     jobs:
       - build
+          filters:
+            tags:
+              only: /.*/
 
       - fe-compile:
           requires:
             - build
+          filters:
+            tags:
+              only: /.*/
 
       - be-tests:
           requires:
             - fe-compile
+          filters:
+            tags:
+              only: /.*/
 
       - images:
           requires:
