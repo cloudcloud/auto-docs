@@ -147,4 +147,9 @@ workflows:
       - docker-image:
           requires:
             - images
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /^v.*/
 
