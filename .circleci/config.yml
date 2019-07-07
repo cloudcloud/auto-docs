@@ -28,6 +28,7 @@ jobs:
           command: |
             go mod download
             GO111MODULE=off go get -u github.com/kevinburke/go-bindata/...
+            GO111MODULE=off go get -u github.com/tcnksm/ghr
             curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > /go/bin/cc-test-reporter
             chmod +x /go/bin/cc-test-reporter
       - persist_to_workspace: *workspace-persist
