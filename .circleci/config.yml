@@ -87,14 +87,38 @@ jobs:
       - attach_workspace:
           at: /go/
       - run:
-          name: Build executables
-          command: |
-            go-bindata -o auto-docs/assets.go -prefix dist/ dist/...
-            GOARCH=amd64 GOOS=linux go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
-            GOARCH=amd64 GOOS=darwin go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
-            GOARCH=amd64 GOOS=windows go build -o build/auto-docs.${GOARCH}-${GOOS}.exe ./auto-docs
-            GOARCH=386 GOOS=linux go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
-            GOARCH=386 GOOS=windows go build -o build/auto-docs.${GOARCH}-${GOOS}.exe ./auto-docs
+          name: Prepare assets
+          command: go-bindata -o auto-docs/assets.go -prefix dist/ dist/...
+      - run:
+          name: Build amd64-linux
+          environment:
+            GOARCH: amd64
+            GOOS: linux
+          command: go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
+      - run:
+          name: Build amd64-darwin
+          environment:
+            GOARCH: amd64
+            GOOS: darwin
+          command: go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
+      - run:
+          name: Build amd64-windows
+          environment:
+            GOARCH: amd64
+            GOOS: windows
+          command: go build -o build/auto-docs.${GOARCH}-${GOOS}.exe ./auto-docs
+      - run:
+          name: Build 386-linux
+          environment:
+            GOARCH: '386'
+            GOOS: linux
+          command: go build -o build/auto-docs.${GOARCH}-${GOOS} ./auto-docs
+      - run:
+          name: Build 386-windows
+          environment:
+            GOARCH: '386'
+            GOOS: windows
+          command: go build -o build/auto-docs.${GOARCH}-${GOOS}.exe ./auto-docs
       - run:
           name: Push to github
           command: |
@@ -110,9 +134,9 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
-      - setup_remote_docker
       - attach_workspace:
           at: /go/
+      - setup_remote_docker
       - run:
           name: Image Build
           command: |
