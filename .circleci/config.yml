@@ -134,8 +134,7 @@ jobs:
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
-      - attach_workspace:
-          at: /go/
+      - checkout
       - setup_remote_docker
       - run:
           name: Image Build
@@ -179,7 +178,7 @@ workflows:
 
       - docker-image:
           requires:
-            - images
+            - be-tests
           filters:
             branches:
               ignore: /.*/
