@@ -102,6 +102,7 @@ jobs:
       - store_artifacts:
           path: build
           destination: binaries
+      - persist_to_workspace: *workspace-persist
 
   docker-image:
     environment: *default-env
