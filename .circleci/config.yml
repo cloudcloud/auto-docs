@@ -130,7 +130,6 @@ jobs:
 
   docker-image:
     environment: *default-env
-    working_directory: *working-dir
     docker:
       - image: circleci/buildpack-deps:stretch
     steps:
