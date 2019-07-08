@@ -138,7 +138,7 @@ jobs:
       - run:
           name: Image Build
           command: |
-            docker build --rm=false -t cloudcloud/auto-docs:v${CIRCLE_TAG} .
+            docker build --rm=false -t cloudcloud/auto-docs:${CIRCLE_TAG} .
             echo ${DOCKERHUB_PASSWORD} | docker login -u "${DOCKERHUB_USERNAME}" --password-stdin
             docker push cloudcloud/auto-docs:${CIRCLE_TAG}
 
@@ -177,7 +177,7 @@ workflows:
 
       - docker-image:
           requires:
-            - be-tests
+            - build
           filters:
             branches:
               ignore: /.*/
