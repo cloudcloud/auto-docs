@@ -10,7 +10,7 @@ require (
 	github.com/mattn/go-isatty v0.0.7 // indirect
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/spf13/cobra v0.0.3
-	github.com/spf13/viper v1.3.2
+	github.com/spf13/viper v1.7.0
 	github.com/stretchr/testify v1.3.0
 	github.com/ugorji/go/codec v0.0.0-20190320090025-2dc34c0b8780 // indirect
 	gitlab.com/golang-commonmark/html v0.0.0-20180917080848-cfaf75183c4a // indirect
