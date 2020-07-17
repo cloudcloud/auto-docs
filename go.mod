@@ -11,7 +11,7 @@ require (
 	github.com/mitchellh/go-homedir v1.0.0
 	github.com/spf13/cobra v0.0.3
 	github.com/spf13/viper v1.7.0
-	github.com/stretchr/testify v1.3.0
+	github.com/stretchr/testify v1.6.1
 	github.com/ugorji/go/codec v0.0.0-20190320090025-2dc34c0b8780 // indirect
 	gitlab.com/golang-commonmark/html v0.0.0-20180917080848-cfaf75183c4a // indirect
 	gitlab.com/golang-commonmark/linkify v0.0.0-20180917065525-c22b7bdb1179 // indirect
