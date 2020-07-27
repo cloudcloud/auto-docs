@@ -18,7 +18,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.12-stretch
+      - image: golang:1.14-stretch
     steps:
       - checkout
       - restore-cache:
@@ -58,7 +58,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.12-stretch
+      - image: golang:1.14-stretch
     steps:
       - attach_workspace:
           at: /go/
@@ -82,7 +82,7 @@ jobs:
     environment: *default-env
     working_directory: *working-dir
     docker:
-      - image: golang:1.12-stretch
+      - image: golang:1.14-stretch
     steps:
       - attach_workspace:
           at: /go/
