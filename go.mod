@@ -1,7 +1,9 @@
 module github.com/cloudcloud/auto-docs
 
+go 1.14
+
 require (
-	github.com/elazarl/go-bindata-assetfs v1.0.0
+	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/gin-contrib/cors v0.0.0-20190301062745-f9e10995c85a
 	github.com/gin-gonic/gin v1.6.3
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
