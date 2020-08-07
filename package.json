@@ -13,7 +13,7 @@
     "sass-loader": "^9.0.3",
     "vue": "^2.6.11",
     "vue-router": "^3.4.2",
-    "vuetify": "2.3.7",
+    "vuetify": "2.3.8",
     "vuex": "^3.5.1",
     "webpack": "^4.44.1"
   },
