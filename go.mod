@@ -5,7 +5,7 @@ go 1.14
 require (
 	github.com/elazarl/go-bindata-assetfs v1.0.1
 	github.com/gin-contrib/cors v0.0.0-20190301062745-f9e10995c85a
-	github.com/gin-gonic/gin v1.6.3
+	github.com/gin-gonic/gin v1.7.3
 	github.com/inconshreveable/mousetrap v1.0.0 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/mitchellh/go-homedir v1.1.0
